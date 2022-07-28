@@ -27,20 +27,15 @@ int main() {
   // printf("%u %u %u %u\n", num1.bits[3], num1.bits[2], num1.bits[1],
   //        num1.bits[0]);
 
-  // s21_decimal a = new_decimal(1, 255, 4294967295, 1, 0);
-  // s21_decimal b = new_decimal(108991, 2, 5, 0, 0);
-  // s21_decimal c = {0};
-
-  // // print_decimal(a);
-  // // print_decimal(b);
-  // // print_decimal(c);
+  // print_decimal(a);
+  // print_decimal(b);
+  // print_decimal(c);
 
   // print_bits(a);
   // print_bits(b);
 
-  // s21_decimal_add(a, b, &c);
   // print_decimal(c);
-  // print_bits(c);
+  //  print_bits(c);
 
   // printf("%d\n", get_left_index(a));
 
@@ -54,10 +49,6 @@ int main() {
   // print_decimal(c);
 
   // simple_add(a, b, &c);
-
-  // printf("%u %u %u %u\n", a.bits[3], a.bits[2], a.bits[1], a.bits[0]);
-  // printf("%u %u %u %u\n", b.bits[3], b.bits[2], b.bits[1], b.bits[0]);
-  // printf("%u %u %u %u\n", c.bits[3], c.bits[2], c.bits[1], c.bits[0]);
 
   // set_bit(&c, 96 + 31);
   // print_decimal(c);
@@ -85,33 +76,50 @@ int main() {
   s21_decimal num1;
   s21_decimal num2;
 
-  num1 = new_decimal(1680, 0, 0, 0, 2);
-  num2 = new_decimal(410, 0, 0, 0, 2);
-  // print_decimal(num2);
-  // inverse_decimal(&num2);
-  // print_decimal(num2);
+  // num1 = new_decimal(10500, 0, 0, 1, 8);
+  // num2 = new_decimal(75, 0, 0, 1, 10);
 
-  // printf("{num1 > num2} %d\n", decimal_great(num1, num2));
+  // num1 = new_decimal(8, 0, 0, 0, 8);
+  // num2 = new_decimal(3, 0, 0, 0, 3);
 
-  // decimal_div_10(&num1, 4);
+  // --- C# operation <DIV> testing result:
+  // num1: 354546
+  //       0000000000 0000000000 0000000000 0000354546
+  // num2: 654
+  //       0000000000 0000000000 0000000000 0000000654
+  // res : 542.11926605504587155963302752 (3.26)
+  //       0001703936 2938834430 0067171418 3464418144
+
+  // int count = 4;
+  //  s21_long_decimal c = {0};
+
+  // print_bits_long(a);
+  // for (int i = 0; i < 10; i++) {
+  //   decimal_mul_10(&a, 1);
+  //   print_bits_long(a);
+  // }
+  // for (int i = 0; i < 10; i++) {
+  //   decimal_div_10(&a, 1);
+  //   print_bits_long(a);
+  // }
+  // print_bits_long(a);
+  // del_nulls(&a, &count);
+  // printf("zeros in a:%d\n", count);
+  // print_bits_long(a);
+
+  // decimal_div_10(&b, 4);
+  // print_bits_long(b);
+
+  num1 = new_decimal(777, 444, 5555, 0, 10);
+  num2 = new_decimal(3333, 88888, 11111, 0, 5);
+  //       0001769472 0000000271 0112304069 1756309468
   print_bits(num1);
-
-  // decimal_simple_div(num1, num2, &result);
-  // print_bits(result);
-
-  // print_bits(num2);
-
-  // s21_decimal result;
+  print_bits(num2);
 
   s21_decimal_div(num1, num2, &result);
   print_bits(result);
 
-  s21_decimal_mod(num1, num2, &result);
-
-  // del_nulls(&num1);
-  // print_bits(num1);
-
-  print_bits(result);
-
   return 0;
 }
+
+// Decimal MAX = 79228162514264337593543950335

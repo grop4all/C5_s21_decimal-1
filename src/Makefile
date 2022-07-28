@@ -53,4 +53,3 @@ lint:
 debug:	s21_decimal.o
 	gcc debug.c s21_decimal.o -o debug.out -lcheck $(LINUX_LIBS)
 	./debug.out
-

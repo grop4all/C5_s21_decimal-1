@@ -2,29 +2,56 @@ using System;
 
 class Decimal_testing {
   static void Main() {
+      
+    int Noper = 3;
     
-    decimal number1 =  new Decimal(102,0,0,false,0);
-    decimal number2 = new Decimal(4,0,0,false,0);
+    string[] Ops = {"ADD" , "SUB", "MUL", "DIV", "MOD"};
+    string[] Ops1 = {"add" , "sub", "mul", "div", "mod"};
     
-    //decimal num_sum = Decimal.Divide(number1, number2);
-    //decimal num_sum = Decimal.Add(number1, number2);
+    int[] num1 = {1,2,3,1,10};
+    int[] num2 = {4,5,6,1,7};
     
-    decimal num_div = number1 / number2;
-    decimal num_mod = number1 % number2;
+    bool b1;
+    if (num1[3]==0) b1 = false;
+        else b1 = true;
+    bool b2;
+    if (num2[3]==0) b2 = false;
+        else b2 = true;
     
-    Console.WriteLine("C# testing result:");
-    Console.WriteLine($"decimal_num1: {number1}");
-    Console.WriteLine($"decimal_num2: {number2}");
-    Console.WriteLine($"decimal_num_div: {num_div}");
-    Console.WriteLine($"decimal_num_mod: {num_mod}");
+    decimal number1 =  new Decimal(num1[0], num1[1], num1[2], b1, (byte)num1[4]);
+    decimal number2 = new Decimal(num2[0], num2[1], num2[2], b2, (byte)num2[4]);
     
-    int[] bits = decimal.GetBits(num_div);
-    int[] bits2 = decimal.GetBits(num_mod);
+    decimal num_result = new Decimal(0,0,0,false,0);
+    
+    if (Noper==0) num_result = number1 + number2;
+    if (Noper==1) num_result = number1 - number2;
+    if (Noper==2) num_result = number1 * number2;
+    if (Noper==3) num_result = number1 / number2;
+    if (Noper==4) num_result = number1 % number2;
 
-    Console.WriteLine("result bits: {0,10:d10} {1,10:D10} {2,10:D10} {3,10:D10}",
-                         (uint)bits[3], (uint)bits[2], (uint)bits[1], (uint)bits[0]);
-    Console.WriteLine("result bits: {0,10:d10} {1,10:D10} {2,10:D10} {3,10:D10}",
-                         (uint)bits2[3], (uint)bits2[2], (uint)bits2[1], (uint)bits2[0]);
+    int[] bits0 = decimal.GetBits(number1);
+    int[] bits1 = decimal.GetBits(number2);
+    int[] bits2 = decimal.GetBits(num_result);
     
+    Console.WriteLine($"num1 = new_decimal({(uint)num1[0]}, {(uint)num1[1]}, {(uint)num1[2]}, {(uint)num1[3]}, {(uint)num1[4]});");
+    Console.WriteLine($"num2 = new_decimal({(uint)num2[0]}, {(uint)num2[1]}, {(uint)num2[2]}, {(uint)num2[3]}, {(uint)num2[4]});");
+    Console.WriteLine($"s21_decimal_{Ops1[Noper]}(num1, num2, &result);\n");
+    
+    Console.WriteLine($"ck_assert_uint_eq(result.bits[0], {(uint)bits2[0]});");
+    Console.WriteLine($"ck_assert_uint_eq(result.bits[1], {(uint)bits2[1]});");
+    Console.WriteLine($"ck_assert_uint_eq(result.bits[2], {(uint)bits2[2]});");
+    Console.WriteLine($"ck_assert_uint_eq(result.bits[3], {(uint)bits2[3]});\n");
+        
+    Console.WriteLine($"// --- C# operation <{Ops[Noper]}> testing result:");
+    Console.WriteLine($"// num1: {number1}");
+    Console.WriteLine("//       {0,10:d10} {1,10:D10} {2,10:D10} {3,10:D10}",
+                         (uint)bits0[3], (uint)bits0[2], (uint)bits0[1], (uint)bits0[0]);
+    Console.WriteLine($"// num2: {number2}");
+    Console.WriteLine("//       {0,10:d10} {1,10:D10} {2,10:D10} {3,10:D10}",
+                         (uint)bits1[3], (uint)bits1[2], (uint)bits1[1], (uint)bits1[0]);
+    Console.WriteLine($"// res : {num_result}");
+    Console.WriteLine("//       {0,10:d10} {1,10:D10} {2,10:D10} {3,10:D10}",
+                         (uint)bits2[3], (uint)bits2[2], (uint)bits2[1], (uint)bits2[0]);
+
   }
 }
