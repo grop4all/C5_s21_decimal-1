@@ -1,6 +1,7 @@
 #ifndef SRC_S21_DECIMAL_H_
 #define SRC_S21_DECIMAL_H_
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -14,11 +15,18 @@ typedef struct {
 
 #define S21_INT_MAX 4294967295
 
-int s21_decimal_add(s21_decimal num1, s21_decimal num2, s21_decimal *res_num);
-int s21_decimal_sub(s21_decimal num1, s21_decimal num2, s21_decimal *res_num);
-int s21_decimal_mul(s21_decimal num1, s21_decimal num2, s21_decimal *res_num);
-int s21_decimal_div(s21_decimal num1, s21_decimal num2, s21_decimal *res_num);
-int s21_decimal_mod(s21_decimal num1, s21_decimal num2, s21_decimal *res_num);
+int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_sub(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_mul(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_div(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result);
+
+int s21_is_less(s21_decimal, s21_decimal);
+int s21_is_less_or_equal(s21_decimal, s21_decimal);
+int s21_is_greater(s21_decimal, s21_decimal);
+int s21_is_greater_or_equal(s21_decimal, s21_decimal);
+int s21_is_equal(s21_decimal, s21_decimal);
+int s21_is_not_equal(s21_decimal, s21_decimal);
 
 int s21_decimal_great(s21_decimal num1, s21_decimal num2);
 
@@ -35,6 +43,7 @@ int simple_add(s21_long_decimal num1, s21_long_decimal num2,
 int get_multiplier(s21_decimal number);
 void set_multiplier(s21_decimal *number, int multipler);
 int left_bit_shift(s21_long_decimal *number, int count);
+int right_bit_shift(s21_long_decimal *number, int count);
 int decimal_mul_10(s21_long_decimal *number, int count);
 void set_minus(s21_decimal *number);
 void reset_minus(s21_decimal *number);
@@ -43,7 +52,7 @@ int decimal_div_10(s21_long_decimal *number, int count);
 
 int decimal_great(s21_long_decimal num1, s21_long_decimal num2);
 int decimal_equal(s21_long_decimal num1, s21_long_decimal num2);
-int decimal_lite(s21_decimal num1, s21_decimal num2);
+int decimal_lite(s21_long_decimal num1, s21_long_decimal num2);
 
 void reset_decimal(s21_decimal *number);
 void reset_decimal_long(s21_long_decimal *number);
@@ -51,13 +60,14 @@ s21_decimal copy_decimal(s21_decimal number);
 s21_long_decimal copy_decimal_long(s21_long_decimal number);
 s21_long_decimal convert_decimal_to_long(s21_decimal number);
 s21_decimal convert_long_to_decimal(s21_long_decimal number, int operation,
-                                    int *multiplier);
+                                    int *multiplier, int *func_status);
 void inverse_decimal(s21_long_decimal *number);
 int get_left_index(s21_long_decimal number);
 int get_rang(s21_long_decimal number);
 
 int del_nulls(s21_long_decimal *number, int *mult);
 void inc_decimal_long(s21_long_decimal *number);
+int is_null(s21_decimal num);
 
 int decimal_simple_div(s21_long_decimal dividend, s21_long_decimal divider,
                        s21_long_decimal *result, s21_long_decimal *ostatok);

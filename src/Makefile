@@ -53,3 +53,11 @@ lint:
 debug:	s21_decimal.o
 	gcc debug.c s21_decimal.o -o debug.out -lcheck $(LINUX_LIBS)
 	./debug.out
+
+leaks_deb: debug
+	gcc -g debug.c s21_decimal.o -o debug.out -lcheck $(LINUX_LIBS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=no --log-file=debug-out.txt ./debug.out
+
+leaks_d: s21_decimal.o
+	gcc -g deb.c s21_decimal.o -o deb.out -lcheck $(LINUX_LIBS)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --show-reachable=no --log-file=debug-out.txt ./deb.out

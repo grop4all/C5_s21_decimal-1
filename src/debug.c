@@ -68,13 +68,10 @@ int main() {
 
   // s21_decimal num1 = new_decimal(10500, 86445646, 5445545, 0, 5);
   // s21_decimal num2 = new_decimal(9999, 9999999, 9999999, 0, 10);
-  s21_decimal result;
+
   // s21_decimal_add(num1, num2, &result);
 
   // print_bits(result);
-
-  s21_decimal num1;
-  s21_decimal num2;
 
   // num1 = new_decimal(10500, 0, 0, 1, 8);
   // num2 = new_decimal(75, 0, 0, 1, 10);
@@ -110,13 +107,17 @@ int main() {
   // decimal_div_10(&b, 4);
   // print_bits_long(b);
 
-  num1 = new_decimal(777, 444, 5555, 0, 10);
-  num2 = new_decimal(3333, 88888, 11111, 0, 5);
-  //       0001769472 0000000271 0112304069 1756309468
+  s21_decimal num1 = {{0, 0, 0, 0}};
+  s21_decimal num2 = {{0, 0, 0, 0}};
+  s21_decimal result = {{0, 0, 0, 0}};
+
+  num1 = new_decimal(1, 0, 0, 0, 28);
+  num2 = new_decimal(9999, 999, 1111, 1, 0);
+
   print_bits(num1);
   print_bits(num2);
 
-  s21_decimal_div(num1, num2, &result);
+  s21_decimal_add(num1, num2, &result);
   print_bits(result);
 
   return 0;
