@@ -295,7 +295,7 @@ int decimal_simple_div(s21_long_decimal dividend, s21_long_decimal divider,
 int decimal_div_10(s21_long_decimal *number, int count) {
   s21_long_decimal temp = copy_decimal_long(*number);
   s21_long_decimal ten = {{10, 0, 0, 0, 0, 0}};
-  s21_long_decimal result = {{0, 0, 0, 0}};
+  s21_long_decimal result = copy_decimal_long(*number);
   s21_long_decimal ost = {{0, 0, 0, 0}};
   for (int i = 0; i < count; i++) {
     decimal_simple_div(temp, ten, &result, &ost);
@@ -322,24 +322,6 @@ int decimal_normalize(s21_decimal num1, s21_decimal num2,
                       int *multipler) {
   int mult1 = get_multiplier(num1);
   int mult2 = get_multiplier(num2);
-  // int free_index1 = 30 - get_left_index(num1) / 3;
-  // int free_index2 = 30 - get_left_index(num2) / 3;
-
-  // int max_mult;
-
-  // if (free_index1 + mult1 < free_index2 + mult2)
-  //   max_mult = free_index1 + mult1;
-  // else
-  //   max_mult = free_index2 + mult2;
-
-  // printf("free1=%d, free2=%d, max=%d\n", free_index1, free_index2,
-  // max_mult);
-
-  // if (mult1 > mult2 && mult1 < max_mult) *multipler = mult1;
-  // if (mult1 > mult2 && mult1 >= max_mult) *multipler = max_mult;
-
-  // if (mult2 > mult1 && mult2 < max_mult) *multipler = mult2;
-  // if (mult2 > mult1 && mult2 >= max_mult) *multipler = max_mult;
 
   if (mult1 > mult2)
     *multipler = mult1;
@@ -354,11 +336,6 @@ int decimal_normalize(s21_decimal num1, s21_decimal num2,
   if (*multipler > mult1) decimal_mul_10(n1_out, *multipler - mult1);
   if (*multipler > mult2) decimal_mul_10(n2_out, *multipler - mult2);
 
-  // if (*multipler < mult1) decimal_div_10(n1_out, mult1 - *multipler);
-  // if (*multipler < mult2) decimal_div_10(n2_out, mult2 - *multipler);
-
-  // set_multiplier(n1_out, *multipler);
-  // set_multiplier(n2_out, *multipler);
   return 0;
 }
 
@@ -387,8 +364,8 @@ int decimal_equal(s21_long_decimal num1, s21_long_decimal num2) {
 int decimal_lite(s21_long_decimal num1, s21_long_decimal num2) {
   int result = 0, bit1 = 0, bit2 = 0;
   for (int i = 0; i < 192 && bit1 == bit2; i++) {
-    bit1 = get_bit_status_long(num1, 95 - i);
-    bit2 = get_bit_status_long(num2, 95 - i);
+    bit1 = get_bit_status_long(num1, 191 - i);
+    bit2 = get_bit_status_long(num2, 191 - i);
     if (bit1 != bit2) {
       if (bit1 < bit2) result = 1;
     }
@@ -422,17 +399,43 @@ int s21_is_less(s21_decimal value_1, s21_decimal value_2) {
 
   int minus1 = get_minus(value_1);
   int minus2 = get_minus(value_2);
-
   int result = decimal_lite(n1, n2);
 
   if (minus2 && !minus1) result = 0;
   if (minus1 && !minus2) result = 1;
   if (minus1 && minus2)
-    if (result)
-      result = 0;
-    else
+    if (decimal_great(n1, n2))
       result = 1;
+    else
+      result = 0;
   return result;
+}
+
+int s21_is_equal(s21_decimal value_1, s21_decimal value_2) {
+  s21_long_decimal n1, n2;
+  int mult = 0;
+  decimal_normalize(value_1, value_2, &n1, &n2, &mult);
+
+  int minus1 = get_minus(value_1);
+  int minus2 = get_minus(value_2);
+  int result = decimal_equal(n1, n2);
+  if (result && !(is_null(value_1) && is_null(value_2)) && (minus1 != minus2))
+    result = 0;
+  return result;
+}
+
+int s21_is_not_equal(s21_decimal value_1, s21_decimal value_2) {
+  return !s21_is_equal(value_1, value_2);
+}
+
+int s21_is_less_or_equal(s21_decimal value_1, s21_decimal value_2) {
+  return s21_is_less(value_1, value_2) == 1 ||
+         s21_is_equal(value_1, value_2) == 1;
+}
+
+int s21_is_greater_or_equal(s21_decimal value_1, s21_decimal value_2) {
+  return s21_is_greater(value_1, value_2) == 1 ||
+         s21_is_equal(value_1, value_2) == 1;
 }
 
 int s21_add(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
@@ -666,4 +669,71 @@ int s21_mod(s21_decimal value_1, s21_decimal value_2, s21_decimal *result) {
     set_minus(result);
 
   return func_result;
+}
+
+int s21_from_int_to_decimal(int src, s21_decimal *dst) {
+  reset_decimal(dst);
+  dst->bits[0] = abs(src);
+  if (src < 0) set_minus(dst);
+  return 0;
+}
+
+int s21_from_decimal_to_int(s21_decimal src, int *dst) {
+  int result = 0;
+  int mult = get_multiplier(src);
+  s21_long_decimal num = convert_decimal_to_long(src);
+  if (mult) decimal_div_10(&num, mult);
+  if (num.bits[1]) result = 1;
+  if (!num.bits[1]) {
+    *dst = num.bits[0];
+    if (get_minus(src)) *dst = *dst * (-1);
+  }
+  return result;
+}
+
+int s21_floor(s21_decimal value, s21_decimal *result) {
+  int res = 0;
+  int mult = get_multiplier(value);
+  int minus = get_minus(value);
+  s21_long_decimal num = convert_decimal_to_long(value);
+  int res_div = decimal_div_10(&num, mult);
+  if (minus && (res_div || !is_null(value))) inc_decimal_long(&num);
+
+  *result = convert_long_to_decimal(num, 0, &mult, &res);
+  if (minus) set_minus(result);
+  return res;
+}
+
+int s21_round(s21_decimal value, s21_decimal *result) {
+  int res = 0;
+  int mult = get_multiplier(value);
+  int minus = get_minus(value);
+  s21_long_decimal num = convert_decimal_to_long(value);
+  int res_div = decimal_div_10(&num, mult);
+  if (res_div == 1) inc_decimal_long(&num);
+
+  *result = convert_long_to_decimal(num, 0, &mult, &res);
+  if (minus) set_minus(result);
+  return res;
+}
+
+int s21_truncate(s21_decimal value, s21_decimal *result) {
+  int res = 0;
+  int mult = get_multiplier(value);
+  int minus = get_minus(value);
+  s21_long_decimal num = convert_decimal_to_long(value);
+  decimal_div_10(&num, mult);
+
+  *result = convert_long_to_decimal(num, 0, &mult, &res);
+  if (minus) set_minus(result);
+  return res;
+}
+
+int s21_negate(s21_decimal value, s21_decimal *result) {
+  int res = 0;
+  int minus = get_minus(value);
+  *result = copy_decimal(value);
+  if (minus) reset_minus(result);
+  if (!minus) set_minus(result);
+  return res;
 }

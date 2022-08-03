@@ -107,18 +107,27 @@ int main() {
   // decimal_div_10(&b, 4);
   // print_bits_long(b);
 
-  s21_decimal num1 = {{0, 0, 0, 0}};
-  s21_decimal num2 = {{0, 0, 0, 0}};
   s21_decimal result = {{0, 0, 0, 0}};
 
-  num1 = new_decimal(1, 0, 0, 0, 28);
-  num2 = new_decimal(9999, 999, 1111, 1, 0);
+  s21_decimal num1 = new_decimal(5, 0, 0, 1, 25);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 0);
 
   print_bits(num1);
   print_bits(num2);
 
-  s21_decimal_add(num1, num2, &result);
+  s21_floor(num1, &result);
+
+  // int res = s21_is_less(num1, num2);
+
+  // float res0 = (num1.bits[0] + num1.bits[1] * S21_INT_MAX +
+  //               num1.bits[2] * S21_INT_MAX * S21_INT_MAX) *
+  //              1 / pow(10, get_multiplier(num1)) * pow(-1, get_minus(num1));
+
+  // int res0;
+  // s21_from_decimal_to_int(num1, &res0);
   print_bits(result);
+
+  // printf("res0 = %10.10f\n", res0);
 
   return 0;
 }

@@ -1697,6 +1697,1072 @@ START_TEST(LESSTest04) {
 }
 END_TEST
 
+START_TEST(LESSTest05) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 0);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 0);
+
+  // --- C# operation <LESS> testing result:
+  // num1: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // num2: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(LESSTest06) {
+  s21_decimal num1 = new_decimal(0, 10, 0, 0, 0);
+  s21_decimal num2 = new_decimal(0, 0, 200, 0, 0);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 1);
+
+  // --- C# operation <LESS> testing result:
+  // num1: 42949672960
+  //       0000000000 0000000000 0000000010 0000000000
+  // num2: 3689348814741910323200
+  //       0000000000 0000000200 0000000000 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(LESSTest07) {
+  s21_decimal num1 = new_decimal(0, 10, 0, 0, 25);
+  s21_decimal num2 = new_decimal(0, 0, 200, 0, 4);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 1);
+
+  // --- C# operation <LESS> testing result:
+  // num1: 0.0000000000000042949672960
+  //       0001638400 0000000000 0000000010 0000000000
+  // num2: 368934881474191032.3200
+  //       0000262144 0000000200 0000000000 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(LESSTest08) {
+  s21_decimal num1 = new_decimal(0, 10, 0, 0, 25);
+  s21_decimal num2 = new_decimal(0, 0, 200, 1, 4);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 0);
+
+  // --- C# operation <LESS> testing result:
+  // num1: 0.0000000000000042949672960
+  //       0001638400 0000000000 0000000010 0000000000
+  // num2: -368934881474191032.3200
+  //       2147745792 0000000200 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(LESSTest09) {
+  s21_decimal num1 = new_decimal(0, 10, 200, 1, 25);
+  s21_decimal num2 = new_decimal(0, 10, 200, 1, 25);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 0);
+
+  // --- C# operation <LESS> testing result:
+  // num1: -0.0003689348814784859996160
+  //       2149122048 0000000200 0000000010 0000000000
+  // num2: -0.0003689348814784859996160
+  //       2149122048 0000000200 0000000010 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(LESSTest10) {
+  s21_decimal num1 = new_decimal(0, 10, 200, 1, 25);
+  s21_decimal num2 = new_decimal(0, 10, 200, 0, 25);
+  ck_assert_uint_eq(s21_is_less(num1, num2), 1);
+
+  // --- C# operation <LESS> testing result:
+  // num1: -0.0003689348814784859996160
+  //       2149122048 0000000200 0000000010 0000000000
+  // num2: 0.0003689348814784859996160
+  //       0001638400 0000000200 0000000010 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest01) {
+  s21_decimal num1 = new_decimal(0, 10, 200, 0, 25);
+  s21_decimal num2 = new_decimal(0, 10, 200, 0, 25);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0003689348814784859996160
+  //       0001638400 0000000200 0000000010 0000000000
+  // num2: 0.0003689348814784859996160
+  //       0001638400 0000000200 0000000010 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest02) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 0);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // num2: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest03) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 5);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 1);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.00000
+  //       0000327680 0000000000 0000000000 0000000000
+  // num2: 0.0
+  //       0000065536 0000000000 0000000000 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest04) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 5);
+  s21_decimal num2 = new_decimal(0, 0, 0, 1, 1);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.00000
+  //       0000327680 0000000000 0000000000 0000000000
+  // num2: 0.0
+  //       2147549184 0000000000 0000000000 0000000000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest05) {
+  s21_decimal num1 = new_decimal(0, 777, 8888, 0, 28);
+  s21_decimal num2 = new_decimal(10, 5454, 5454, 1, 15);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0000163954661330467684352000
+  //       0001835008 0000008888 0000000777 0000000000
+  // num2: -100608542.201436646146058
+  //       2148466688 0000005454 0000005454 0000000010
+  // res : False 0
+}
+END_TEST
+
+START_TEST(EQUALTest06) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 0, 3);
+  s21_decimal num2 = new_decimal(25, 0, 0, 0, 0);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 25.000
+  //       0000196608 0000000000 0000000000 0000025000
+  // num2: 25
+  //       0000000000 0000000000 0000000000 0000000025
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest07) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 0, 15);
+  s21_decimal num2 = new_decimal(250000, 0, 0, 0, 16);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.000000000025000
+  //       0000983040 0000000000 0000000000 0000025000
+  // num2: 0.0000000000250000
+  //       0001048576 0000000000 0000000000 0000250000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest08) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 1, 15);
+  s21_decimal num2 = new_decimal(250000, 0, 0, 0, 16);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: -0.000000000025000
+  //       2148466688 0000000000 0000000000 0000025000
+  // num2: 0.0000000000250000
+  //       0001048576 0000000000 0000000000 0000250000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(EQUALTest09) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 0, 28);
+  s21_decimal num2 = new_decimal(1, 0, 0, 0, 28);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0000000000000000000000000001
+  //       0001835008 0000000000 0000000000 0000000001
+  // num2: 0.0000000000000000000000000001
+  //       0001835008 0000000000 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(EQUALTest10) {
+  s21_decimal num1 = new_decimal(2222222, 333333, 444444, 1, 28);
+  s21_decimal num2 = new_decimal(2222222, 333333, 444444, 1, 28);
+  ck_assert_uint_eq(s21_is_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: -0.0008198544724527422294321294
+  //       2149318656 0000444444 0000333333 0002222222
+  // num2: -0.0008198544724527422294321294
+  //       2149318656 0000444444 0000333333 0002222222
+  // res : True 1
+}
+END_TEST
+
+START_TEST(NOTEQUALTest01) {
+  s21_decimal num1 = new_decimal(0, 10, 200, 0, 25);
+  s21_decimal num2 = new_decimal(0, 10, 200, 0, 25);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0003689348814784859996160
+  //       0001638400 0000000200 0000000010 0000000000
+  // num2: 0.0003689348814784859996160
+  //       0001638400 0000000200 0000000010 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest02) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 0);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // num2: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest03) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 5);
+  s21_decimal num2 = new_decimal(0, 0, 0, 0, 1);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.00000
+  //       0000327680 0000000000 0000000000 0000000000
+  // num2: 0.0
+  //       0000065536 0000000000 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest04) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 5);
+  s21_decimal num2 = new_decimal(0, 0, 0, 1, 1);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.00000
+  //       0000327680 0000000000 0000000000 0000000000
+  // num2: 0.0
+  //       2147549184 0000000000 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest05) {
+  s21_decimal num1 = new_decimal(0, 777, 8888, 0, 28);
+  s21_decimal num2 = new_decimal(10, 5454, 5454, 1, 15);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0000163954661330467684352000
+  //       0001835008 0000008888 0000000777 0000000000
+  // num2: -100608542.201436646146058
+  //       2148466688 0000005454 0000005454 0000000010
+  // res : True 1
+}
+END_TEST
+
+START_TEST(NOTEQUALTest06) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 0, 3);
+  s21_decimal num2 = new_decimal(25, 0, 0, 0, 0);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 25.000
+  //       0000196608 0000000000 0000000000 0000025000
+  // num2: 25
+  //       0000000000 0000000000 0000000000 0000000025
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest07) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 0, 15);
+  s21_decimal num2 = new_decimal(250000, 0, 0, 0, 16);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.000000000025000
+  //       0000983040 0000000000 0000000000 0000025000
+  // num2: 0.0000000000250000
+  //       0001048576 0000000000 0000000000 0000250000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest08) {
+  s21_decimal num1 = new_decimal(25000, 0, 0, 1, 15);
+  s21_decimal num2 = new_decimal(250000, 0, 0, 0, 16);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 1);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: -0.000000000025000
+  //       2148466688 0000000000 0000000000 0000025000
+  // num2: 0.0000000000250000
+  //       0001048576 0000000000 0000000000 0000250000
+  // res : True 1
+}
+END_TEST
+
+START_TEST(NOTEQUALTest09) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 0, 28);
+  s21_decimal num2 = new_decimal(1, 0, 0, 0, 28);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: 0.0000000000000000000000000001
+  //       0001835008 0000000000 0000000000 0000000001
+  // num2: 0.0000000000000000000000000001
+  //       0001835008 0000000000 0000000000 0000000001
+  // res : False 0
+}
+END_TEST
+
+START_TEST(NOTEQUALTest10) {
+  s21_decimal num1 = new_decimal(2222222, 333333, 444444, 1, 28);
+  s21_decimal num2 = new_decimal(2222222, 333333, 444444, 1, 28);
+  ck_assert_uint_eq(s21_is_not_equal(num1, num2), 0);
+
+  // --- C# operation <EQUAL> testing result:
+  // num1: -0.0008198544724527422294321294
+  //       2149318656 0000444444 0000333333 0002222222
+  // num2: -0.0008198544724527422294321294
+  //       2149318656 0000444444 0000333333 0002222222
+  // res : False 0
+}
+END_TEST
+
+START_TEST(GREATEQTest01) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 1, 10);
+  s21_decimal num2 = new_decimal(0, 0, 0, 1, 28);
+  ck_assert_uint_eq(s21_is_greater_or_equal(num1, num2), 0);
+
+  // --- C# operation <GREATEQ> testing result:
+  // num1: -0.0000000001
+  //       2148139008 0000000000 0000000000 0000000001
+  // num2: 0.0000000000000000000000000000
+  //       2149318656 0000000000 0000000000 0000000000
+  // res : False 0
+}
+END_TEST
+
+START_TEST(GREATEQTest02) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 1, 25);
+  s21_decimal num2 = new_decimal(1, 0, 0, 1, 28);
+  ck_assert_uint_eq(s21_is_greater_or_equal(num1, num2), 0);
+
+  // --- C# operation <GREATEQ> testing result:
+  // num1: -0.0000000000000000000000001
+  //       2149122048 0000000000 0000000000 0000000001
+  // num2: -0.0000000000000000000000000001
+  //       2149318656 0000000000 0000000000 0000000001
+  // res : False 0
+}
+END_TEST
+
+START_TEST(GREATEQTest03) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 0, 25);
+  s21_decimal num2 = new_decimal(1, 0, 0, 0, 28);
+  ck_assert_uint_eq(s21_is_greater_or_equal(num1, num2), 1);
+
+  // --- C# operation <GREATEQ> testing result:
+  // num1: 0.0000000000000000000000001
+  //       0001638400 0000000000 0000000000 0000000001
+  // num2: 0.0000000000000000000000000001
+  //       0001835008 0000000000 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(GREATEQTest04) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 0, 28);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 0, 28);
+  ck_assert_uint_eq(s21_is_greater_or_equal(num1, num2), 1);
+
+  // --- C# operation <GREATEQ> testing result:
+  // num1: 0.0000163954661327130494763009
+  //       0001835008 0000008888 0000000000 0000000001
+  // num2: 0.0000163954661327130494763009
+  //       0001835008 0000008888 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(GREATEQTest05) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 1, 28);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 0, 28);
+  ck_assert_uint_eq(s21_is_greater_or_equal(num1, num2), 0);
+
+  // --- C# operation <GREATEQ> testing result:
+  // num1: -0.0000163954661327130494763009
+  //       2149318656 0000008888 0000000000 0000000001
+  // num2: 0.0000163954661327130494763009
+  //       0001835008 0000008888 0000000000 0000000001
+  // res : False 0
+}
+END_TEST
+
+START_TEST(LESSEQTest01) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 1, 28);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 0, 28);
+  ck_assert_uint_eq(s21_is_less_or_equal(num1, num2), 1);
+
+  // --- C# operation <LESSEQ> testing result:
+  // num1: -0.0000163954661327130494763009
+  //       2149318656 0000008888 0000000000 0000000001
+  // num2: 0.0000163954661327130494763009
+  //       0001835008 0000008888 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(LESSEQTest02) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 1, 28);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 1, 28);
+  ck_assert_uint_eq(s21_is_less_or_equal(num1, num2), 1);
+
+  // --- C# operation <LESSEQ> testing result:
+  // num1: -0.0000163954661327130494763009
+  //       2149318656 0000008888 0000000000 0000000001
+  // num2: -0.0000163954661327130494763009
+  //       2149318656 0000008888 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(LESSEQTest03) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 1, 5);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 1, 8);
+  ck_assert_uint_eq(s21_is_less_or_equal(num1, num2), 1);
+
+  // --- C# operation <LESSEQ> testing result:
+  // num1: -1639546613271304947.63009
+  //       2147811328 0000008888 0000000000 0000000001
+  // num2: -1639546613271304.94763009
+  //       2148007936 0000008888 0000000000 0000000001
+  // res : True 1
+}
+END_TEST
+
+START_TEST(LESSEQTest04) {
+  s21_decimal num1 = new_decimal(1, 0, 8888, 0, 5);
+  s21_decimal num2 = new_decimal(1, 0, 8888, 0, 8);
+  ck_assert_uint_eq(s21_is_less_or_equal(num1, num2), 0);
+
+  // --- C# operation <LESSEQ> testing result:
+  // num1: 1639546613271304947.63009
+  //       0000327680 0000008888 0000000000 0000000001
+  // num2: 1639546613271304.94763009
+  //       0000524288 0000008888 0000000000 0000000001
+  // res : False 0
+}
+END_TEST
+
+START_TEST(LESSEQTest05) {
+  s21_decimal num1 = new_decimal(128400, 0, 0, 0, 5);
+  s21_decimal num2 = new_decimal(1284, 0, 0, 0, 3);
+  ck_assert_uint_eq(s21_is_less_or_equal(num1, num2), 1);
+
+  // --- C# operation <LESSEQ> testing result:
+  // num1: 1.28400
+  //       0000327680 0000000000 0000000000 0000128400
+  // num2: 1.284
+  //       0000196608 0000000000 0000000000 0000001284
+  // res : True 1
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_INT_Test01) {
+  int int_num = 1231243;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_int_to_decimal(int_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1231243);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_INT> testing result:
+  // int_num: 1231243
+  // res : 1231243
+  //       0000000000 0000000000 0000000000 0001231243
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_INT_Test02) {
+  int int_num = 0;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_int_to_decimal(int_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_INT> testing result:
+  // int_num: 0
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_INT_Test03) {
+  int int_num = 2121212211;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_int_to_decimal(int_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 2121212211);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_INT> testing result:
+  // int_num: 2121212211
+  // res : 2121212211
+  //       0000000000 0000000000 0000000000 2121212211
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_INT_Test04) {
+  int int_num = -2121212211;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_int_to_decimal(int_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 2121212211);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <CONVERT_FROM_INT> testing result:
+  // int_num: -2121212211
+  // res : -2121212211
+  //       2147483648 0000000000 0000000000 2121212211
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_INT_Test05) {
+  int int_num = -95452;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_int_to_decimal(int_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 95452);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <CONVERT_FROM_INT> testing result:
+  // int_num: -95452
+  // res : -95452
+  //       2147483648 0000000000 0000000000 0000095452
+}
+END_TEST
+
+// START_TEST(CONVERT_FROM_FLOAT_Test01) {
+//   float float_num = -1.006;
+//   s21_decimal result;
+//   ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+//   ck_assert_uint_eq(result.bits[0], 1006);
+//   ck_assert_uint_eq(result.bits[1], 0);
+//   ck_assert_uint_eq(result.bits[2], 0);
+//   ck_assert_uint_eq(result.bits[3], 2147680256);
+
+//   // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+//   // float_num: -1.006
+//   // res : -1.006
+//   //       2147680256 0000000000 0000000000 0000001006
+// }
+// END_TEST
+
+START_TEST(FLOORTest01) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 1, 25);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: -0.0000000000000000000000001
+  //       2149122048 0000000000 0000000000 0000000001
+  // res : -1
+  //       2147483648 0000000000 0000000000 0000000001
+}
+END_TEST
+
+START_TEST(FLOORTest02) {
+  s21_decimal num1 = new_decimal(1, 0, 0, 0, 25);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: 0.0000000000000000000000001
+  //       0001638400 0000000000 0000000000 0000000001
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+END_TEST
+
+START_TEST(FLOORTest03) {
+  s21_decimal num1 = new_decimal(125684, 0, 0, 0, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 125);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: 125.684
+  //       0000196608 0000000000 0000000000 0000125684
+  // res : 125
+  //       0000000000 0000000000 0000000000 0000000125
+}
+END_TEST
+
+START_TEST(FLOORTest04) {
+  s21_decimal num1 = new_decimal(125684, 0, 0, 1, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 126);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: -125.684
+  //       2147680256 0000000000 0000000000 0000125684
+  // res : -126
+  //       2147483648 0000000000 0000000000 0000000126
+}
+END_TEST
+
+START_TEST(FLOORTest05) {
+  s21_decimal num1 = new_decimal(125684, 6556, 65652323, 0, 25);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 121);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: 121.1071600225543448684522228
+  //       0001638400 0065652323 0000006556 0000125684
+  // res : 121
+  //       0000000000 0000000000 0000000000 0000000121
+}
+END_TEST
+
+START_TEST(FLOORTest06) {
+  s21_decimal num1 = new_decimal(125684, 6556, 65652323, 1, 25);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 122);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: -121.1071600225543448684522228
+  //       2149122048 0065652323 0000006556 0000125684
+  // res : -122
+  //       2147483648 0000000000 0000000000 0000000122
+}
+END_TEST
+
+START_TEST(FLOORTest07) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <FLOOR> testing result:
+  // num: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+END_TEST
+
+START_TEST(FLOORTest08) {
+  s21_decimal num1 = new_decimal(S21_INT_MAX, S21_INT_MAX, S21_INT_MAX, 1, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_floor(num1, &result), 2);
+}
+END_TEST
+
+START_TEST(ROUNDTest01) {
+  s21_decimal num1 = new_decimal(15, 0, 0, 0, 1);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 2);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <ROUND> testing result:
+  // num: 1.5
+  //       0000065536 0000000000 0000000000 0000000015
+  // res : 2
+  //       0000000000 0000000000 0000000000 0000000002
+}
+END_TEST
+
+START_TEST(ROUNDTest02) {
+  s21_decimal num1 = new_decimal(15, 0, 0, 1, 1);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 2);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <ROUND> testing result:
+  // num: -1.5
+  //       2147549184 0000000000 0000000000 0000000015
+  // res : -2
+  //       2147483648 0000000000 0000000000 0000000002
+}
+END_TEST
+
+START_TEST(ROUNDTest03) {
+  s21_decimal num1 = new_decimal(14242, 0, 0, 0, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 14);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <ROUND> testing result:
+  // num: 14.242
+  //       0000196608 0000000000 0000000000 0000014242
+  // res : 14
+  //       0000000000 0000000000 0000000000 0000000014
+}
+END_TEST
+
+START_TEST(ROUNDTest04) {
+  s21_decimal num1 = new_decimal(14242, 0, 0, 1, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 14);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <ROUND> testing result:
+  // num: -14.242
+  //       2147680256 0000000000 0000000000 0000014242
+  // res : -14
+  //       2147483648 0000000000 0000000000 0000000014
+}
+END_TEST
+
+START_TEST(ROUNDTest05) {
+  s21_decimal num1 = new_decimal(14242, 8888, 9999941, 0, 15);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 4077725947);
+  ck_assert_uint_eq(result.bits[1], 42);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <ROUND> testing result:
+  // num: 184466352379.233340965795746
+  //       0000983040 0009999941 0000008888 0000014242
+  // res : 184466352379
+  //       0000000000 0000000000 0000000042 4077725947
+}
+END_TEST
+
+START_TEST(ROUNDTest06) {
+  s21_decimal num1 = new_decimal(14242, 8888, 9999941, 1, 15);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 4077725947);
+  ck_assert_uint_eq(result.bits[1], 42);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <ROUND> testing result:
+  // num: -184466352379.233340965795746
+  //       2148466688 0009999941 0000008888 0000014242
+  // res : -184466352379
+  //       2147483648 0000000000 0000000042 4077725947
+}
+END_TEST
+
+START_TEST(ROUNDTest07) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_round(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <ROUND> testing result:
+  // num: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+END_TEST
+
+START_TEST(TRUNCATETest01) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+END_TEST
+
+START_TEST(TRUNCATETest02) {
+  s21_decimal num1 = new_decimal(45800000, 0, 0, 0, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 45800);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: 45800.000
+  //       0000196608 0000000000 0000000000 0045800000
+  // res : 45800
+  //       0000000000 0000000000 0000000000 0000045800
+}
+END_TEST
+
+START_TEST(TRUNCATETest03) {
+  s21_decimal num1 = new_decimal(45800000, 0, 0, 1, 3);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 45800);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: -45800.000
+  //       2147680256 0000000000 0000000000 0045800000
+  // res : -45800
+  //       2147483648 0000000000 0000000000 0000045800
+}
+END_TEST
+
+START_TEST(TRUNCATETest04) {
+  s21_decimal num1 = new_decimal(45800000, 65656, 65455454, 0, 24);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1207);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: 1207.440008166750155580299840
+  //       0001572864 0065455454 0000065656 0045800000
+  // res : 1207
+  //       0000000000 0000000000 0000000000 0000001207
+}
+END_TEST
+
+START_TEST(TRUNCATETest05) {
+  s21_decimal num1 = new_decimal(45800000, 65656, 65455454, 1, 24);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1207);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: -1207.440008166750155580299840
+  //       2149056512 0065455454 0000065656 0045800000
+  // res : -1207
+  //       2147483648 0000000000 0000000000 0000001207
+}
+END_TEST
+
+START_TEST(TRUNCATETest06) {
+  s21_decimal num1 = new_decimal(45800000, 65656667, 654554541, 1, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 45800000);
+  ck_assert_uint_eq(result.bits[1], 65656667);
+  ck_assert_uint_eq(result.bits[2], 654554541);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: -12074400100393418962901850688
+  //       2147483648 0654554541 0065656667 0045800000
+  // res : -12074400100393418962901850688
+  //       2147483648 0654554541 0065656667 0045800000
+}
+END_TEST
+
+START_TEST(TRUNCATETest07) {
+  s21_decimal num1 = new_decimal(45800000, 65656667, 654554541, 1, 28);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: -1.2074400100393418962901850688
+  //       2149318656 0654554541 0065656667 0045800000
+  // res : -1
+  //       2147483648 0000000000 0000000000 0000000001
+}
+END_TEST
+
+START_TEST(TRUNCATETest08) {
+  s21_decimal num1 = new_decimal(45800000, 65656667, 654554541, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_truncate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 45800000);
+  ck_assert_uint_eq(result.bits[1], 65656667);
+  ck_assert_uint_eq(result.bits[2], 654554541);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <TRUNCATE> testing result:
+  // num: 12074400100393418962901850688
+  //       0000000000 0654554541 0065656667 0045800000
+  // res : 12074400100393418962901850688
+  //       0000000000 0654554541 0065656667 0045800000
+}
+END_TEST
+
+START_TEST(NEGATETest01) {
+  s21_decimal num1 = new_decimal(45800000, 65656667, 654554541, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_negate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 45800000);
+  ck_assert_uint_eq(result.bits[1], 65656667);
+  ck_assert_uint_eq(result.bits[2], 654554541);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <NEGATE> testing result:
+  // num: 12074400100393418962901850688
+  //       0000000000 0654554541 0065656667 0045800000
+  // res : -12074400100393418962901850688
+  //       2147483648 0654554541 0065656667 0045800000
+}
+END_TEST
+
+START_TEST(NEGATETest02) {
+  s21_decimal num1 = new_decimal(4500, 65667, 6554541, 1, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_negate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 4500);
+  ck_assert_uint_eq(result.bits[1], 65667);
+  ck_assert_uint_eq(result.bits[2], 6554541);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <NEGATE> testing result:
+  // num: -120909940347918315776119188
+  //       2147483648 0006554541 0000065667 0000004500
+  // res : 120909940347918315776119188
+  //       0000000000 0006554541 0000065667 0000004500
+}
+END_TEST
+
+START_TEST(NEGATETest03) {
+  s21_decimal num1 = new_decimal(4500, 65667, 6554541, 1, 15);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_negate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 4500);
+  ck_assert_uint_eq(result.bits[1], 65667);
+  ck_assert_uint_eq(result.bits[2], 6554541);
+  ck_assert_uint_eq(result.bits[3], 983040);
+
+  // --- C# operation <NEGATE> testing result:
+  // num: -120909940347.918315776119188
+  //       2148466688 0006554541 0000065667 0000004500
+  // res : 120909940347.918315776119188
+  //       0000983040 0006554541 0000065667 0000004500
+}
+END_TEST
+
+START_TEST(NEGATETest04) {
+  s21_decimal num1 = new_decimal(4500, 65667, 6554541, 0, 15);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_negate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 4500);
+  ck_assert_uint_eq(result.bits[1], 65667);
+  ck_assert_uint_eq(result.bits[2], 6554541);
+  ck_assert_uint_eq(result.bits[3], 2148466688);
+
+  // --- C# operation <NEGATE> testing result:
+  // num: 120909940347.918315776119188
+  //       0000983040 0006554541 0000065667 0000004500
+  // res : -120909940347.918315776119188
+  //       2148466688 0006554541 0000065667 0000004500
+}
+END_TEST
+
+START_TEST(NEGATETest05) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  s21_decimal result;
+  ck_assert_uint_eq(s21_negate(num1, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <NEGATE> testing result:
+  // num: 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // res : 0
+  //       2147483648 0000000000 0000000000 0000000000
+}
+END_TEST
+
 Suite *my_suite_create() {
   Suite *my_suite = suite_create("Test_decimal");
   TCase *DecimalTest = tcase_create("DECIMAL");
@@ -1804,6 +2870,84 @@ Suite *my_suite_create() {
   tcase_add_test(DecimalTest, LESSTest02);
   tcase_add_test(DecimalTest, LESSTest03);
   tcase_add_test(DecimalTest, LESSTest04);
+  tcase_add_test(DecimalTest, LESSTest05);
+  tcase_add_test(DecimalTest, LESSTest06);
+  tcase_add_test(DecimalTest, LESSTest07);
+  tcase_add_test(DecimalTest, LESSTest08);
+  tcase_add_test(DecimalTest, LESSTest09);
+  tcase_add_test(DecimalTest, LESSTest10);
+
+  tcase_add_test(DecimalTest, EQUALTest01);
+  tcase_add_test(DecimalTest, EQUALTest02);
+  tcase_add_test(DecimalTest, EQUALTest03);
+  tcase_add_test(DecimalTest, EQUALTest04);
+  tcase_add_test(DecimalTest, EQUALTest05);
+  tcase_add_test(DecimalTest, EQUALTest06);
+  tcase_add_test(DecimalTest, EQUALTest07);
+  tcase_add_test(DecimalTest, EQUALTest08);
+  tcase_add_test(DecimalTest, EQUALTest09);
+  tcase_add_test(DecimalTest, EQUALTest10);
+
+  tcase_add_test(DecimalTest, NOTEQUALTest01);
+  tcase_add_test(DecimalTest, NOTEQUALTest02);
+  tcase_add_test(DecimalTest, NOTEQUALTest03);
+  tcase_add_test(DecimalTest, NOTEQUALTest04);
+  tcase_add_test(DecimalTest, NOTEQUALTest05);
+  tcase_add_test(DecimalTest, NOTEQUALTest06);
+  tcase_add_test(DecimalTest, NOTEQUALTest07);
+  tcase_add_test(DecimalTest, NOTEQUALTest08);
+  tcase_add_test(DecimalTest, NOTEQUALTest09);
+  tcase_add_test(DecimalTest, NOTEQUALTest10);
+
+  tcase_add_test(DecimalTest, GREATEQTest01);
+  tcase_add_test(DecimalTest, GREATEQTest02);
+  tcase_add_test(DecimalTest, GREATEQTest03);
+  tcase_add_test(DecimalTest, GREATEQTest04);
+  tcase_add_test(DecimalTest, GREATEQTest05);
+
+  tcase_add_test(DecimalTest, LESSEQTest01);
+  tcase_add_test(DecimalTest, LESSEQTest02);
+  tcase_add_test(DecimalTest, LESSEQTest03);
+  tcase_add_test(DecimalTest, LESSEQTest04);
+  tcase_add_test(DecimalTest, LESSEQTest05);
+
+  tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test01);
+  tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test02);
+  tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test03);
+  tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test04);
+  tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test05);
+
+  tcase_add_test(DecimalTest, FLOORTest01);
+  tcase_add_test(DecimalTest, FLOORTest02);
+  tcase_add_test(DecimalTest, FLOORTest03);
+  tcase_add_test(DecimalTest, FLOORTest04);
+  tcase_add_test(DecimalTest, FLOORTest05);
+  tcase_add_test(DecimalTest, FLOORTest06);
+  tcase_add_test(DecimalTest, FLOORTest07);
+  tcase_add_test(DecimalTest, FLOORTest08);
+
+  tcase_add_test(DecimalTest, ROUNDTest01);
+  tcase_add_test(DecimalTest, ROUNDTest02);
+  tcase_add_test(DecimalTest, ROUNDTest03);
+  tcase_add_test(DecimalTest, ROUNDTest04);
+  tcase_add_test(DecimalTest, ROUNDTest05);
+  tcase_add_test(DecimalTest, ROUNDTest06);
+  tcase_add_test(DecimalTest, ROUNDTest07);
+
+  tcase_add_test(DecimalTest, TRUNCATETest01);
+  tcase_add_test(DecimalTest, TRUNCATETest02);
+  tcase_add_test(DecimalTest, TRUNCATETest03);
+  tcase_add_test(DecimalTest, TRUNCATETest04);
+  tcase_add_test(DecimalTest, TRUNCATETest05);
+  tcase_add_test(DecimalTest, TRUNCATETest06);
+  tcase_add_test(DecimalTest, TRUNCATETest07);
+  tcase_add_test(DecimalTest, TRUNCATETest08);
+
+  tcase_add_test(DecimalTest, NEGATETest01);
+  tcase_add_test(DecimalTest, NEGATETest02);
+  tcase_add_test(DecimalTest, NEGATETest03);
+  tcase_add_test(DecimalTest, NEGATETest04);
+  tcase_add_test(DecimalTest, NEGATETest05);
 
   return my_suite;
 }
