@@ -1641,6 +1641,13 @@ START_TEST(GREATTest10) {
 }
 END_TEST
 
+START_TEST(GREATTest11) {
+  s21_decimal num1 = new_decimal(0, 777, 8888, 1, 15);
+  s21_decimal num2 = new_decimal(1, 777, 8888, 1, 15);
+  ck_assert_uint_eq(s21_is_greater(num1, num2), 1);
+}
+END_TEST
+
 START_TEST(LESSTest01) {
   s21_decimal num1 = new_decimal(0, 777, 8888, 0, 28);
   s21_decimal num2 = new_decimal(10, 5454, 5454, 0, 15);
@@ -2281,21 +2288,377 @@ START_TEST(CONVERT_FROM_INT_Test05) {
 }
 END_TEST
 
-// START_TEST(CONVERT_FROM_FLOAT_Test01) {
-//   float float_num = -1.006;
-//   s21_decimal result;
-//   ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
-//   ck_assert_uint_eq(result.bits[0], 1006);
-//   ck_assert_uint_eq(result.bits[1], 0);
-//   ck_assert_uint_eq(result.bits[2], 0);
-//   ck_assert_uint_eq(result.bits[3], 2147680256);
+START_TEST(CONVERT_TO_INT_Test01) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 5);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, 0);
 
-//   // --- C# operation <CONVERT_FROM_FLOAT> testing result:
-//   // float_num: -1.006
-//   // res : -1.006
-//   //       2147680256 0000000000 0000000000 0000001006
-// }
-// END_TEST
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : 0.00000
+  //       0000327680 0000000000 0000000000 0000000000
+  // int_num: 0
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test02) {
+  s21_decimal num1 = new_decimal(128568, 0, 0, 0, 0);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, 128568);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : 128568
+  //       0000000000 0000000000 0000000000 0000128568
+  // int_num: 128568
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test03) {
+  s21_decimal num1 = new_decimal(128568, 0, 0, 0, 7);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, 0);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : 0.0128568
+  //       0000458752 0000000000 0000000000 0000128568
+  // int_num: 0
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test04) {
+  s21_decimal num1 = new_decimal(128568, 0, 0, 0, 4);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, 12);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : 12.8568
+  //       0000262144 0000000000 0000000000 0000128568
+  // int_num: 12
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test05) {
+  s21_decimal num1 = new_decimal(128568, 565656, 1215445, 0, 25);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, 2);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : 2.2421002853099379984823864
+  //       0001638400 0001215445 0000565656 0000128568
+  // int_num: 2
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test06) {
+  s21_decimal num1 = new_decimal(128568, 565656, 1215445, 1, 25);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, -2);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : -2.2421002853099379984823864
+  //       2149122048 0001215445 0000565656 0000128568
+  // int_num: -2
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test07) {
+  s21_decimal num1 = new_decimal(128568, 565656, 1, 1, 15);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 0);
+  ck_assert_uint_eq(result, -18449);
+
+  // --- C# operation <CONVERT_TO_INT> testing result:
+  // decimal_num : -18449.173547730466360
+  //       2148466688 0000000001 0000565656 0000128568
+  // int_num: -18449
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test08) {
+  s21_decimal num1 = new_decimal(128568, 565656, 13214342, 0, 15);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 1);
+}
+END_TEST
+
+START_TEST(CONVERT_TO_INT_Test09) {
+  s21_decimal num1 = new_decimal(128568, 565656, 13214342, 1, 15);
+  int result;
+  ck_assert_uint_eq(s21_from_decimal_to_int(num1, &result), 2);
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test01) {
+  float float_num = -1.006;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1006);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147680256);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: -1.006
+  // res : -1.006
+  //       2147680256 0000000000 0000000000 0000001006
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test02) {
+  float float_num = 1.34351E+10;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 550198112);
+  ck_assert_uint_eq(result.bits[1], 3);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: 1.34351E+10
+  // res : 13435100000
+  //       0000000000 0000000000 0000000003 0550198112
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test03) {
+  float float_num = 1.34351E+15;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1280138240);
+  ck_assert_uint_eq(result.bits[1], 312810);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: 1.34351E+15
+  // res : 1343510000000000
+  //       0000000000 0000000000 0000312810 1280138240
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test04) {
+  float float_num = 1.4517E+20;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 997523456);
+  ck_assert_uint_eq(result.bits[1], 3735253467);
+  ck_assert_uint_eq(result.bits[2], 7);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: 1.4517E+20
+  // res : 145170000000000000000
+  //       0000000000 0000000007 3735253467 0997523456
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test05) {
+  float float_num = 0;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: 0
+  // res : 0
+  //       0000000000 0000000000 0000000000 0000000000
+}
+
+START_TEST(CONVERT_FROM_FLOAT_Test06) {
+  float float_num = 150.8974;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1508974);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 262144);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: 150.8974
+  // res : 150.8974
+  //       0000262144 0000000000 0000000000 0001508974
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test07) {
+  float float_num = -150.8974;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 1508974);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147745792);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: -150.8974
+  // res : -150.8974
+  //       2147745792 0000000000 0000000000 0001508974
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test08) {
+  float float_num = 1.8974E32f;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 2);
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test09) {
+  float float_num = -1.50896E+10;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 2204698112);
+  ck_assert_uint_eq(result.bits[1], 3);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2147483648);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: -1.50896E+10
+  // res : -15089600000
+  //       2147483648 0000000000 0000000003 2204698112
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test10) {
+  float float_num = -1.50896E-10;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 0);
+  ck_assert_uint_eq(result.bits[0], 150896);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 2148466688);
+
+  // --- C# operation <CONVERT_FROM_FLOAT> testing result:
+  // float_num: -1.50896E-10
+  // res : -0.000000000150896
+  //       2148466688 0000000000 0000000000 0000150896
+}
+END_TEST
+
+START_TEST(CONVERT_FROM_FLOAT_Test11) {
+  float float_num = 1.8974E-32f;
+  s21_decimal result;
+  ck_assert_uint_eq(s21_from_float_to_decimal(float_num, &result), 1);
+  ck_assert_uint_eq(result.bits[0], 0);
+  ck_assert_uint_eq(result.bits[1], 0);
+  ck_assert_uint_eq(result.bits[2], 0);
+  ck_assert_uint_eq(result.bits[3], 0);
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test01) {
+  s21_decimal num1 = new_decimal(12845, 0, 0, 0, 2);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, 128.45, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : 128.45
+  //       0000131072 0000000000 0000000000 0000012845
+  // float_num: 128.45
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test02) {
+  s21_decimal num1 = new_decimal(478, 237, 425, 0, 5);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, 7.839867E+16, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : 78398662323444666.86430
+  //       0000327680 0000000425 0000000237 0000000478
+  // float_num: 7.839867E+16
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test03) {
+  s21_decimal num1 = new_decimal(478, 237, 425, 1, 5);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, -7.839867E+16, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : -78398662323444666.86430
+  //       2147811328 0000000425 0000000237 0000000478
+  // float_num: -7.839867E+16
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test04) {
+  s21_decimal num1 = new_decimal(478, 237, 425, 1, 25);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, -0.0007839866, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : -0.0007839866232344466686430
+  //       2149122048 0000000425 0000000237 0000000478
+  // float_num: -0.0007839866
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test05) {
+  s21_decimal num1 = new_decimal(0, 0, 0, 0, 0);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, 0, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : 0
+  //       0000000000 0000000000 0000000000 0000000000
+  // float_num: 0
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test06) {
+  s21_decimal num1 = new_decimal(10000, 0, 0, 0, 0);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result, 10000, S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : 10000
+  //       0000000000 0000000000 0000000000 0000010000
+  // float_num: 10000
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test07) {
+  s21_decimal num1 = new_decimal(0, 0, 77, 1, 6);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result / -1.420399E+15, -1.420399E+15 / result,
+                         S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : -1420399293675635.474432
+  //       2147876864 0000000077 0000000000 0000000000
+  // float_num: -1.420399E+15
+}
+END_TEST
+
+START_TEST(CONVERT_TO_FLOAT_Test08) {
+  s21_decimal num1 = new_decimal(666, 8888, 7777, 1, 6);
+  float result;
+  ck_assert_uint_eq(s21_from_decimal_to_float(num1, &result), 0);
+  ck_assert_float_eq_tol(result / -1.434603E+17, -1.434603E+17 / result,
+                         S21_EPS_TEST);
+
+  // --- C# operation <CONVERT_TO_FLOAT> testing result:
+  // decimal_num : -143460328699412852.245146
+  //       2147876864 0000007777 0000008888 0000000666
+  // float_num: -1.434603E+17
+}
+END_TEST
 
 START_TEST(FLOORTest01) {
   s21_decimal num1 = new_decimal(1, 0, 0, 1, 25);
@@ -2865,6 +3228,7 @@ Suite *my_suite_create() {
   tcase_add_test(DecimalTest, GREATTest08);
   tcase_add_test(DecimalTest, GREATTest09);
   tcase_add_test(DecimalTest, GREATTest10);
+  tcase_add_test(DecimalTest, GREATTest11);
 
   tcase_add_test(DecimalTest, LESSTest01);
   tcase_add_test(DecimalTest, LESSTest02);
@@ -2916,6 +3280,37 @@ Suite *my_suite_create() {
   tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test03);
   tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test04);
   tcase_add_test(DecimalTest, CONVERT_FROM_INT_Test05);
+
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test01);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test02);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test03);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test04);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test05);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test06);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test07);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test08);
+  tcase_add_test(DecimalTest, CONVERT_TO_INT_Test09);
+
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test01);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test02);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test03);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test04);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test05);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test06);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test07);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test08);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test09);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test10);
+  tcase_add_test(DecimalTest, CONVERT_FROM_FLOAT_Test11);
+
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test01);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test02);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test03);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test04);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test05);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test06);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test07);
+  tcase_add_test(DecimalTest, CONVERT_TO_FLOAT_Test08);
 
   tcase_add_test(DecimalTest, FLOORTest01);
   tcase_add_test(DecimalTest, FLOORTest02);

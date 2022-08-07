@@ -2,7 +2,6 @@
 #define SRC_S21_DECIMAL_H_
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 
 typedef struct {
@@ -45,7 +44,6 @@ int get_bit_status_long(s21_long_decimal num, int index);
 void set_bit(s21_decimal *num, int index);
 void set_bit_long(s21_long_decimal *num, int index);
 void reset_bit(s21_decimal *num, int index);
-void reset_bit_long(s21_long_decimal *num, int index);
 int simple_add(s21_long_decimal num1, s21_long_decimal num2,
                s21_long_decimal *result);
 int get_multiplier(s21_decimal number);
@@ -80,9 +78,10 @@ int is_null(s21_decimal num);
 int decimal_simple_div(s21_long_decimal dividend, s21_long_decimal divider,
                        s21_long_decimal *result, s21_long_decimal *ostatok);
 
-// for DEBUG; временно, удалить в конечной версии ------
-void print_decimal(s21_decimal number);
-void print_bits(s21_decimal num);
-void print_bits_long(s21_long_decimal num);
+int get_float_params(float number, int *rank, int *mantissa);
+
+int _pow(int x, int y);
+double float_div10(double num, int count);
+double float_mul10(double num, int count);
 
 #endif  // SRC_S21_DECIMAL_H_
