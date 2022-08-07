@@ -25,7 +25,7 @@ gcov_report: test_decimal.c s21_decimal.c
 	./coverage.o
 	lcov -c -d . -o coverage.info
 	genhtml coverage.info -o coverage
-	# open coverage/index.html
+	open coverage/index.html
 
 	
 clean:
